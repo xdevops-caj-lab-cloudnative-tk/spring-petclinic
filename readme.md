@@ -133,3 +133,49 @@ select * from owners;
 ```
 
 ![MySQL Terminal](images/13-mysql-terminal-2.png)
+
+
+## Deploy to Kuberentes from source code
+
+### Build container image
+
+Compile the jar file firstly:
+```bash
+# ensure use java 8
+mvn --version
+
+# you can use `sdk list java | grep -i installed` to check the java version, and use `sdk use java` to switch to java 8
+# also ensure no other jdk profile is defined in ~/.m2/settings.xml
+mvn clean package
+```
+
+Build container image with Podman:
+
+```bash
+podman build -t spring-petclinic:1.0.0 .
+```
+
+### Push the image to a registry
+Push the image to Quay.io
+
+```bash
+podman login quay.io
+podman tag spring-petclinic:1.0.0 quay.io/williamsrlin/spring-petclinic:1.0.0
+podman push quay.io/williamsrlin/spring-petclinic:1.0.0
+```
+
+### Deploy MySQL
+
+```bash
+kubectl apply -f kubernetes/mysql
+```
+
+### Deploy Spring Pet Clinic
+
+```bash
+kubectl apply -f kubernetes/spring-petclinic
+```
+
+## Troubleshooting
+
+- https://stackoverflow.com/questions/30604846/docker-error-no-space-left-on-device
