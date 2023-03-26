@@ -29,12 +29,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: spring-petclinic-secret
-                  key: database-user
+                  key: DATABASE_USER
             - name: MYSQL_PASS
               valueFrom:
                 secretKeyRef:
                   name: spring-petclinic-secret
-                  key: database-password
+                  key: DATABASE_PASSWORD
           envFrom:
             - configMapRef:
                 name: spring-petclinic-config

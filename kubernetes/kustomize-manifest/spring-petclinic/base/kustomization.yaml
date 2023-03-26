@@ -1,0 +1,6 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - deployment-spring-petclinic.yaml
+  - service-spring-petclinic.yaml
+  - route-spring-petclinic.yaml

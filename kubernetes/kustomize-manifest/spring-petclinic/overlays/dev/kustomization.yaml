@@ -11,10 +11,10 @@ configMapGenerator:
       - MYSQL_URL=jdbc:mysql://mysql:3306/petclinic
 
 secretGenerator:
-  - name: spring-boot-secret
+  - name: spring-petclinic-secret
     literals:
-      - database-user=petclinic
-      - database-password=petclinic
+      - DATABASE_USER=petclinic
+      - DATABASE_PASSWORD=petclinic
 
 patchesStrategicMerge:
   - |-
@@ -27,5 +27,5 @@ patchesStrategicMerge:
       template:
         spec:
           containers:
-            - name: spring-boot-app
-              image: quay.io/williamsrlin/spring-petclinic:1.0.0
+            - name: spring-petclinic
+              image: quay.io/williamsrlin/spring-petclinic:1.0.1

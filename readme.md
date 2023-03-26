@@ -176,6 +176,57 @@ kubectl apply -f kubernetes/mysql
 kubectl apply -f kubernetes/spring-petclinic
 ```
 
+
+## Deploy to multi-env with Kustomize
+
+### Deploy to dev env
+
+Create a dev namespace for dev env.
+
+Run below command on the dev namespace:
+```bash
+# deploy mysql database
+oc apply -f kubernetes/mysql
+
+# deploy spring-petclinic application
+oc apply -k kubernetes/kustomize-manifest/spring-petclinic/overlays/dev
+```
+
+Verify pods:
+```bash
+oc get pods -w
+```
+
+检查：
+- spring-petclinic的Pod数量为`1`
+- spring-petclinic的容器镜像为`quay.io/williamsrlin/spring-petclinic:1.0.1`
+- spring-petclinic的Pod日志，应该有`The following profiles are active: dev`
+- 在浏览器中打开spring-petclinic的route URL，可以成功访问
+
+### Deploy to test env
+
+Create a test namespace for test env.
+
+Run below command on the dev namespace:
+```bash
+# deploy mysql database
+oc apply -f kubernetes/mysql
+
+# deploy spring-petclinic application
+oc apply -k kubernetes/kustomize-manifest/spring-petclinic/overlays/test
+```
+
+Verify pods:
+```bash
+oc get pods -w
+```
+
+检查：
+- spring-petclinic的Pod数量为`2`
+- spring-petclinic的容器镜像为`quay.io/williamsrlin/spring-petclinic:1.0.0`
+- spring-petclinic的Pod日志，应该有`The following profiles are active: test`
+- 在浏览器中打开spring-petclinic的route URL，可以成功访问
+
 ## Troubleshooting
 
 - https://stackoverflow.com/questions/30604846/docker-error-no-space-left-on-device
