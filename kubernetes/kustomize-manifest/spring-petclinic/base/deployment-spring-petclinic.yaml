@@ -1,0 +1,62 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: spring-petclinic
+  labels:
+    app: spring-petclinic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spring-petclinic
+  template:
+    metadata:
+      labels:
+        app: spring-petclinic
+    spec:
+      containers:
+        - name: spring-petclinic
+          image: quay.io/williamsrlin/spring-petclinic:1.0.0
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+            - containerPort: 8443
+              protocol: TCP
+            - containerPort: 8778
+              protocol: TCP
+          env:
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: spring-petclinic-secret
+                  key: database-user
+            - name: MYSQL_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: spring-petclinic-secret
+                  key: database-password
+          envFrom:
+            - configMapRef:
+                name: spring-petclinic-config
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 500m
+              memory: 512Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
