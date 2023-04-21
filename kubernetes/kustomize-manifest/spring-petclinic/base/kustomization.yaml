@@ -3,4 +3,4 @@ kind: Kustomization
 resources:
   - deployment-spring-petclinic.yaml
   - service-spring-petclinic.yaml
-  - route-spring-petclinic.yaml
+  - ingress-spring-petclinic.yaml

@@ -7,13 +7,8 @@ metadata:
 spec:
   strategy:
     type: Recreate
-    recreateParams:
-      timeoutSeconds: 600
-    resources: {}
-    activeDeadlineSeconds: 21600
   replicas: 1
   revisionHistoryLimit: 10
-  test: false
   selector:
     matchLabels:
       app: mysql
@@ -33,32 +28,32 @@ spec:
             requests:
               cpu: '1'
               memory: 512Mi
-          readinessProbe:
-            exec:
-              command:
-                - /bin/sh
-                - '-i'
-                - '-c'
-                - MYSQL_PWD="$MYSQL_PASSWORD" mysqladmin -u $MYSQL_USER ping
-            initialDelaySeconds: 5
-            timeoutSeconds: 1
-            periodSeconds: 10
-            successThreshold: 1
-            failureThreshold: 3
+          # readinessProbe:
+          #   exec:
+          #     command:
+          #       - /bin/sh
+          #       - '-i'
+          #       - '-c'
+          #       - MYSQL_PWD="$MYSQL_PASSWORD" mysqladmin -u $MYSQL_USER ping
+          #   initialDelaySeconds: 300
+          #   timeoutSeconds: 1
+          #   periodSeconds: 10
+          #   successThreshold: 1
+          #   failureThreshold: 3
           terminationMessagePath: /dev/termination-log
           name: mysql
-          livenessProbe:
-            exec:
-              command:
-                - /bin/sh
-                - '-i'
-                - '-c'
-                - MYSQL_PWD="$MYSQL_PASSWORD" mysqladmin -u $MYSQL_USER ping
-            initialDelaySeconds: 30
-            timeoutSeconds: 1
-            periodSeconds: 10
-            successThreshold: 1
-            failureThreshold: 3
+          # livenessProbe:
+          #   exec:
+          #     command:
+          #       - /bin/sh
+          #       - '-i'
+          #       - '-c'
+          #       - MYSQL_PWD="$MYSQL_PASSWORD" mysqladmin -u $MYSQL_USER ping
+          #   initialDelaySeconds: 300
+          #   timeoutSeconds: 1
+          #   periodSeconds: 10
+          #   successThreshold: 1
+          #   failureThreshold: 3
           env:
             - name: MYSQL_USER
               valueFrom:
